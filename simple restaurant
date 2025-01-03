@@ -1,0 +1,1269 @@
+import tkinter as tk
+from tkinter import ttk
+from PIL import Image, ImageTk
+from openpyxl import Workbook, load_workbook
+from tkinter import *
+basket_all_orders={}
+
+
+def open_second_window(event):
+    # Create a new top-level window (second page).
+    basket=[]
+    menu = {
+        'Pulled Pork and Slaw Burgers': 50,
+        'Chicken Cutlets with Sun-Dried Tomato Cream Sauce': 300,
+        'Baked Eggs in Tomato Sauce with Kale': 500,
+        'Extra Ketchup': 10,
+        'Extra Mayonnaise': 10,
+        'Extra Egg': 15,
+        'Special Extra': 100,
+        "Baked Eggs in Tomato Sauce with Kale": 350,
+        'Herb-Crusted Salmon with Lemon and Olive Gremolata':350
+        }
+
+    t = tk.Toplevel(home_page)
+    t.geometry("1500x1500")
+    t.title("Main Window")
+    
+    outer_frame = tk.Frame(t, bg="lightgreen")
+    outer_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+    inner_frame = tk.Frame(outer_frame, bg="white")
+    inner_frame.pack(fill="both", expand=True, padx=20, pady=20)
+
+    title = tk.Label(inner_frame, text="Lean & Green", font=('Harlow Solid', 16), bg="darkgreen", fg="white")
+    title.pack(fill="x", pady=10)
+
+    canvas = tk.Canvas(inner_frame, width=200, height=200)
+    canvas.pack()
+    img = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (8).png")
+    image_id = canvas.create_image(110   , 110, image=img, anchor="center")
+
+    text_label = tk.Label(inner_frame, text="Pulled Pork and Slaw Burgers", font=("Goudy Old Style", 18), fg="darkgreen")
+    text_label.place(x='630',y='288')
+    #########################################################################################################################
+  
+    canvas_desgine = tk.Canvas(inner_frame, width=300, height=300)
+    canvas_desgine.place(x='1100',y='370')
+    img_desgine = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (9).png")
+    image_id_desgine = canvas_desgine.create_image(150   , 150, image=img_desgine, anchor="center")
+    
+    canvas_desgine.image = img_desgine
+    def calculate_bill():
+            total = 0
+            for item in basket:
+                if item in menu:
+                    total += menu[item]
+            
+            tax = total * 0.1
+            total_with_tax = total + tax
+            
+
+            bill_window = tk.Toplevel(t)
+            bill_window.geometry("400x300")
+            bill_window.title("FOOD BILL")
+            bill_window.resizable(False,False)
+
+            bill_text = tk.Label(bill_window, text="--------- FOOD BILL ---------\n", font=("Arial", 16))
+            bill_text.pack(pady=10)
+            
+            for item in basket:
+                if item in menu:
+                    bill_text = tk.Label(bill_window, text=f"{item}: {menu[item]} EG", font=("Arial", 12))
+                    bill_text.pack(anchor="w", padx=10)
+            
+            bill_text = tk.Label(bill_window, text=f"\nALL PRICE: {total} EG", font=("Arial", 14, "bold"))
+            bill_text.pack(pady=10)
+            bill_text = tk.Label(bill_window, text=f"TAX:(10%): {tax} EG", font=("Arial", 12))
+            bill_text.pack(pady=5)
+            bill_text = tk.Label(bill_window, text=f'Total with tax {total_with_tax} EG"', font=("Arial", 14, "bold"))
+            bill_text.pack(pady=10)
+            bill_button = tk.Button(inner_frame, text=" CALCLUATE BILL ", bg="lightgreen", width=20, fg="green", command=calculate_bill)
+            bill_button.place(x=1150, y=690)
+
+
+    ###############################ordres#####################################################################################
+    def add_to_basket(item):
+            
+        
+        basket.append(item)
+            
+                
+        print(f"Item added: {item} ") 
+        print(f"Current Basket: {basket}"  ) 
+    bill_button = tk.Button(t, text=" CALCLUATE BILL ", bg="lightgreen", width=20, fg="green", command=calculate_bill)
+    bill_button.place(x=1150, y=710)
+    ######################################first_photo_item################################
+
+    def on_image_click(event):
+        img_description1 = tk.Toplevel(t) 
+        img_description1.geometry("1000x800")
+        img_description1.title("Recipe Details")
+        img_description1.resizable(False,False)
+        outer_frame = tk.Frame(img_description1, bg="lightgreen")
+        outer_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+        inner_frame = tk.Frame(outer_frame, bg="white")
+        inner_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+        # **الصورة**
+        canvas = tk.Canvas(inner_frame, width=300, height=300)
+        canvas.place(x=20, y=20)
+        img2 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Hoisin-pulled-pork-and-slaw-burgers-800x509.png")
+        canvas.create_image(150, 150, image=img2, anchor="center")
+        canvas.image = img2  
+        canvas_desgine = tk.Canvas(inner_frame, width=300, height=300)
+        canvas_desgine.place(x='1100',y='370')
+        img_desgine = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (9).png")
+        image_id_desgine = canvas_desgine.create_image(150   , 150, image=img_desgine, anchor="center")
+        canvas_desgine.image = img_desgine
+        name_meal1=tk.Label(inner_frame, text='Pulled Pork and Slaw Burgers',font=("Goudy Old Style", 14), fg="darkgreen")
+        name_meal1.place(x='10',y='380')
+        cost_meal1=tk.Label(inner_frame, text="PPASB=300EG",font=("Goudy Old Style", 14), fg="darkgreen")
+        cost_meal1.place(x='10',y='420')
+        # **إطار المكونات (يسار)**
+        frame_ingredients = tk.Frame(inner_frame, bg="lightgreen")
+        frame_ingredients.place(x=350, y=20, width=250, height=500)
+
+        Ingredients2=tk.Label(frame_ingredients, text="Ingredients", font=("Arial", 16, "bold"), bg="lightgreen")
+        Ingredients2.pack(pady=10)
+        ingredients = [
+            "• 2 large corn cobs, husks removed",
+            "• 1 medium red onion, chopped",
+            "• 250g seasoned pulled pork",
+            "• ¼ cup hoisin sauce",
+            "• 1 x 350g packet kaleslaw kit",
+            "• 2 shallots, sliced",
+            "• 4 wholegrain rolls",
+            "• 1 tsp sesame seeds",
+            "• ¼ cup reduced-fat mayonnaise"
+        ]
+        for ing in ingredients:
+            tk.Label(frame_ingredients, text=ing, bg="lightgreen", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+        frame_cal = tk.Frame(inner_frame, bg="white", bd=2, relief="ridge")
+        frame_cal.place(x=700, y=20, width=250, height=500)
+        tk.Label(frame_cal , text="Calories", font=("Arial", 16, "bold"), bg="white").pack(pady=10)
+        calss = [
+            'Corn cobs (2 large): ~180 calories',
+            'Red onion (1 medium): ~45 calories',
+            'Seasoned pulled pork (250g): ~625 calories',
+            'Hoisin sauce (¼ cup): ~140 calories',
+            'Kaleslaw kit (350g): ~175 calories',
+            'Shallots (2): ~30 calories',
+            'Wholegrain rolls (4): ~640 calories',
+            'Sesame seeds (1 tsp): ~15 calories',
+            'Reduced-fat mayonnaise (¼ cup): ~180 calories',
+            'Total Calories: ~2,030 calories'  ]   
+        for cals in calss:
+            tk.Label(frame_cal, text=cals, bg="lightgray", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+        # **إطار الخطوات (يمين)**
+        # frame_steps = tk.Frame(inner_frame, bg="white", bd=2, relief="ridge")
+        # frame_steps.place(x=650, y=20, width=230, height=500)
+        order = tk.Button(inner_frame, text='Add to Basket', bg="white", width=20, fg='green', command=lambda:add_to_basket('Pulled Pork and Slaw Burgers'))
+        order.place(x=800, y=600)
+        
+    
+    ################################photo (2)################################################################
+
+    canvas2 = tk.Canvas(inner_frame, width=270, height=200)
+    canvas2.place(x='20',y='60')
+    img2 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\2.png")
+    image_id2 = canvas2.create_image(130, 130, image=img2, anchor="center")
+
+    text_label2 = tk.Label(inner_frame, text="Chicken Cutlets with\n Sun-Dried Tomato Cream Sauce", font=("Goudy Old Style", 18), fg="darkgreen")
+    text_label2.place(x="10",y="290")
+    canvas.tag_bind(image_id, "<Button-1>", on_image_click)
+    canvas.image = img
+
+
+    def on_image_click2(event):
+        img_description2 = tk.Toplevel(t) 
+        img_description2.geometry("1000x800")
+        img_description2.title("Recipe Details")
+        img_description2.resizable(False,False)
+        outer_frame = tk.Frame(img_description2, bg="lightgreen")
+        outer_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+        inner_frame = tk.Frame(outer_frame, bg="white")
+        inner_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        frame_ingredients = tk.Frame(inner_frame, bg="lightgreen")
+        frame_ingredients.place(x=390, y=20, width=250, height=500)
+        frame_ingredients = tk.Frame(inner_frame, bg="lightgreen")
+        frame_ingredients.place(x=390, y=20, width=250, height=500)
+        canvas2 = tk.Canvas(inner_frame, width=300, height=300)
+        canvas2.place(x='20',y='60')
+        img2 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Chicken-Cutlets-Resized.png")
+        image_id2 = canvas2.create_image(150, 150, image=img2, anchor="center")
+        canvas2.tag_bind(image_id2, "<Button-1>", on_image_click2)
+        canvas2.image = img2 
+
+        canvas_desgine = tk.Canvas(inner_frame, width=300, height=300)
+        canvas_desgine.place(x='1100',y='370')
+        img_desgine = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (9).png")
+        image_id_desgine = canvas_desgine.create_image(150   , 150, image=img_desgine, anchor="center")
+        canvas_desgine.image = img_desgine
+        
+
+        name_meal1=tk.Label(inner_frame, text='Chicken Cutlets with\n Sun-Dried Tomato Cream Sauce',font=("Goudy Old Style", 14), fg="darkgreen")
+        name_meal1.place(x='10',y='380')
+        cost_meal1=tk.Label(inner_frame, text="CCWSTCS=300EG",font=("Goudy Old Style", 14), fg="darkgreen")
+        cost_meal1.place(x='10',y='460')
+
+        Ingredients2=tk.Label(frame_ingredients, text="Ingredients", font=("Arial", 16, "bold"), bg="lightgreen")
+        Ingredients2.pack(pady=10)
+        ingredients = [
+            '1 pound chicken cutlets',
+            '¼ teaspoon salt, divided',
+            '¼ teaspoon ground pepper, divided',
+            '½ cup slivered oil-packed sun-dried tomatoes, plus 1 tablespoon oil from the jar',
+            '½ cup finely chopped shallots',
+            '½ cup dry white wine',
+            '½ cup heavy cream',
+            '2 tablespoons chopped fresh parsley',
+        ]
+        for ing in ingredients:
+            tk.Label(frame_ingredients, text=ing, bg="lightgreen", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+        frame_cal = tk.Frame(inner_frame, bg="white", bd=2, relief="ridge")
+        frame_cal.place(x=700, y=20, width=250, height=500)
+        tk.Label(frame_cal , text="Calories", font=("Arial", 16, "bold"), bg="white").pack(pady=10)
+        cal = [
+            '1Chicken breast (raw, skinless):=660 cal ',
+            '¼ teaspoon salt, divided~0',
+            '¼ teaspoon ground pepper, divided~0',
+            '½ cup slivered oil-packed sun-dried tomatoes=260 calories'
+            '½ cup finely chopped shallots~32 cal',
+            '½ cup dry white wine~100 calories per ½ cup',
+            '½ cup heavy cream~400 calories per ½ cup',
+            '2 tablespoons chopped fresh parsley~2 calories'
+        ]
+        order = tk.Button(inner_frame, text='Add to Basket', bg="white", width=20, fg='green', command=lambda:add_to_basket("Chicken Cutlets with Sun-Dried Tomato Cream Sauce"))
+        order.place(x=800, y=600)
+        for cals in cal:
+            tk.Label(frame_cal, text=cals, bg="lightgray", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+    canvas2.tag_bind(image_id2, "<Button-1>", on_image_click2)
+    canvas2.image = img2  
+    #################################therd_image#################################
+    canvas3 = tk.Canvas(inner_frame, width=200, height=250)
+    canvas3.place(x='20',y='400')
+    img3 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (1).png")
+    image_id3 = canvas3.create_image(100, 125, image=img3, anchor="center")
+    
+
+    text_label2 = tk.Label(inner_frame, text="Baked Eggs in Tomato Sauce with Kale", font=("Goudy Old Style", 18), fg="darkgreen")
+    text_label2.place(x="10",y="670")
+
+    def on_image_click3(event):
+        img_description3 = tk.Toplevel(t) 
+        img_description3.geometry("1000x800")
+        img_description3.title("Recipe Details")
+        img_description3.resizable(False,False)
+        outer_frame = tk.Frame(img_description3, bg="lightgreen")
+        outer_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+        inner_frame = tk.Frame(outer_frame, bg="white")
+        inner_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        frame_ingredients = tk.Frame(inner_frame, bg="lightgreen")
+        frame_ingredients.place(x=350, y=20, width=250, height=500)
+        frame_ingredients = tk.Frame(inner_frame, bg="lightgreen")
+        frame_ingredients.place(x=350, y=20, width=250, height=500)
+        Ingredients2=tk.Label(frame_ingredients, text="Ingredients", font=("Arial", 16, "bold"), bg="lightgreen")
+        Ingredients2.pack(pady=10)
+        canvas3 = tk.Canvas(inner_frame, width=200, height=250)
+        canvas3.place(x='20',y='60')
+        img3 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (1).png")
+        image_id3 = canvas3.create_image(100, 150, image=img3, anchor="center")
+        canvas3.tag_bind(image_id3, "<Button-1>", on_image_click3)
+        canvas3.image = img3
+
+        canvas_desgine = tk.Canvas(inner_frame, width=300, height=300)
+        canvas_desgine.place(x='1100',y='370')
+        img_desgine = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (9).png")
+        image_id_desgine = canvas_desgine.create_image(150   , 150, image=img_desgine, anchor="center")
+        canvas_desgine.image = img_desgine
+
+        name_meal=tk.Label(inner_frame, text="Baked Eggs in Tomato Sauce with Kale",font=("Goudy Old Style", 14), fg="darkgreen")
+        name_meal.place(x='10',y='340')
+        cost_meal=tk.Label(inner_frame, text="BETSWK=500EG",font=("Goudy Old Style", 14), fg="darkgreen")
+        cost_meal.place(x='10',y='380')
+        
+        ingredients = [
+            '1 tablespoon extra-virgin olive oil',
+            '3 10-ounce packages frozen chopped kale, thawed, drained and squeezed dry (9 cups',
+            '½ teaspoon salt, divided',
+            '¼ teaspoon ground pepper, divided',
+            '1 25-ounce jar low-sodium marinara sauce or 3 cups canned low-sodium tomato sauce',
+            '8 large eggs'
+        ]
+        for ing in ingredients:
+            tk.Label(frame_ingredients, text=ing, bg="lightgreen", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+            frame_cal = tk.Frame(inner_frame, bg="white", bd=2, relief="ridge")
+        frame_cal.place(x=650, y=20, width=250, height=500)
+        tk.Label(frame_cal , text="Calories", font=("Arial", 16, "bold"), bg="white").pack(pady=10)
+        cal = [
+            'Extra-virgin olive oil (1 tablespoon): ~120 calories',
+            'Frozen chopped kale (3 packages, ~30 oz total): Kale has ~33 calories per 100g',
+            ' Assuming 30 ounces (~850g), the kale contributes ~280 calories.','Salt & ground pepper~0',
+            ' Marinara sauce has ~70 calories per cup. For 3 cups, that"s ~210 calories.',
+            "Large eggs (8): A large egg has ~70 calories. For 8 eggs, that's ~560 calories.",
+            'Total: ~1,170 calories']
+        for cals in cal:
+            tk.Label(frame_cal, text=cals, bg="lightgray", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+    
+
+        
+        extra_frame = tk.Frame(inner_frame, bg="lightgreen")
+        extra_frame.place(x=950, y=20, width=250, height=250)
+
+        # Adding radio buttons for extra items
+        extres1 = ttk.Radiobutton(extra_frame, text='Extra Ketchup\n10EG', value=1, command=lambda: add_to_basket('Extra Ketchup'))
+        extres1.place(x=10, y=40)
+
+        extres2 = ttk.Radiobutton(extra_frame, text='Extra Mayonnaise\n10EG', value=2, command=lambda: add_to_basket('Extra Mayonnaise'))
+        extres2.place(x=10, y=80)
+
+        extres3 = ttk.Radiobutton(extra_frame, text='Extra Egg\n15EG', value=3, command=lambda: add_to_basket('Extra Egg'))
+        extres3.place(x=10, y=120)
+
+        extres4 = ttk.Radiobutton(extra_frame, text='Special Extra\n100EG', value=4, command=lambda: add_to_basket('Special Extra'))
+        extres4.place(x=10, y=160)
+
+        
+        order = tk.Button(inner_frame, text='Add to Basket', bg="white", width=20, fg='green', command=lambda:add_to_basket("Chicken Cutlets with Sun-Dried Tomato Cream Sauce"))
+        order.place(x=800, y=600)
+    canvas3.tag_bind(image_id3, "<Button-1>", on_image_click3)
+    canvas3.image = img3
+    ################################################################################################################
+    canvas4 = tk.Canvas(inner_frame, width=200, height=250)
+    canvas4.place(x='630',y='400')
+    img4 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (6).png")
+    image_id4 = canvas4.create_image(105, 120, image=img4, anchor="center")
+    
+
+    text_label4 = tk.Label(inner_frame, text="Creamy Tortellini Vegetable Soup ", font=("Goudy Old Style", 18), fg="darkgreen")
+    text_label4.place(x="600",y="670")
+
+    canvas4.image = img4
+
+    def on_image_click4(event):
+        img_description3 = tk.Toplevel(t) 
+        img_description3.geometry("1000x800")
+        img_description3.title("Recipe Details")
+        img_description3.resizable(False,False)
+        outer_frame = tk.Frame(img_description3, bg="lightgreen")
+        outer_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+        inner_frame = tk.Frame(outer_frame, bg="white")
+        inner_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        frame_ingredients = tk.Frame(inner_frame, bg="lightgreen")
+        frame_ingredients.place(x=350, y=20, width=250, height=500)
+        frame_ingredients = tk.Frame(inner_frame, bg="lightgreen")
+        frame_ingredients.place(x=350, y=20, width=250, height=500)
+        Ingredients2=tk.Label(frame_ingredients, text="Ingredients", font=("Arial", 16, "bold"), bg="lightgreen")
+        Ingredients2.pack(pady=10)
+        canvas3 = tk.Canvas(inner_frame, width=200, height=250)
+        canvas3.place(x='20',y='60')
+        img3 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (6).png")
+        image_id3 = canvas3.create_image(100, 150, image=img3, anchor="center")
+        canvas3.tag_bind(image_id3, "<Button-1>", on_image_click3)
+        canvas3.image = img3
+
+        canvas_desgine = tk.Canvas(inner_frame, width=300, height=300)
+        canvas_desgine.place(x='1100',y='370')
+        img_desgine = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (9).png")
+        image_id_desgine = canvas_desgine.create_image(150   , 150, image=img_desgine, anchor="center")
+        canvas_desgine.image = img_desgine
+
+        name_meal=tk.Label(inner_frame, text="Creamy Tortellini Vegetable Soup",font=("Goudy Old Style", 14), fg="darkgreen")
+        name_meal.place(x='10',y='340')
+        cost_meal=tk.Label(inner_frame, text="CTVS=350EG",font=("Goudy Old Style", 14), fg="darkgreen")
+        cost_meal.place(x='10',y='380')
+        
+        
+        
+        ingredients = [
+            '2 tablespoons extra-virgin olive oil',
+            '1 large carrot, peeled and chopped (1 cup)',
+            '1 small yellow onion, chopped (1 cup)',
+            '3 cups reduced-sodium vegetable broth or no-chicken broth',
+            '1 (15-ounce) can no-salt-added diced tomatoes with basil, garlic and oregano, undrained',
+            '2 tablespoons chopped fresh basil, plus more for garnish'
+            '½ teaspoon ground pepper'
+            '¼ teaspoon plus ⅛ teaspoon salt'
+            '1 (9-ounce) package refrigerated cheese tortellini',
+            '1 (5-ounce) package baby spinach',
+            '1 cup heavy cream'
+        ]
+        for ing in ingredients:
+            tk.Label(frame_ingredients, text=ing, bg="lightgreen", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+            frame_cal = tk.Frame(inner_frame, bg="white", bd=2, relief="ridge")
+        frame_cal.place(x=650, y=20, width=250, height=500)
+        tk.Label(frame_cal , text="Calories", font=("Arial", 16, "bold"), bg="white").pack(pady=10)
+        cal = [
+            'Extra-virgin olive oil (1 tablespoon): ~120 calories',
+            'Carrot (1 cup): ~52 calories',
+            'Yellow onion (1 cup): ~64 calories',
+            'Garlic (1 tablespoon): ~13 calories',
+            'Vegetable broth (1 cup): ~10 calories',
+            'Diced tomatoes (15-ounce can): ~90 calories',
+            'Basil (2 tablespoons): ~2 calories',
+            'Cheese tortellini (9 ounces): ~650 calories',
+            'Baby spinach (5 ounces): ~35 calories',
+            'Heavy cream (1 cup): ~820 calories',
+            'Total Calories: ~1,996 calories'
+            ]
+        for cals in cal:
+            tk.Label(frame_cal, text=cals, bg="lightgray", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+        order = tk.Button(inner_frame, text='Add to Basket', bg="white", width=20, fg='green', command=lambda:add_to_basket("Baked Eggs in Tomato Sauce with Kale"))
+        order.place(x=800, y=600)
+
+
+    canvas4.tag_bind(image_id4, "<Button-1>", on_image_click4)
+    canvas4.image = img4
+
+    ##################################################################################################################################################
+
+    canvas5 = tk.Canvas(inner_frame, width=200, height=250)
+    canvas5.place(x='1150',y='50')
+    img5 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (7).png")
+    image_id5 = canvas5.create_image(105, 120, image=img5, anchor="center")
+    
+
+    text_label5 = tk.Label(inner_frame, text=" Herb-Crusted Salmon with \nLemon and Olive Gremolata", font=("Goudy Old Style", 18), fg="darkgreen")
+    text_label5.place(x="1100",y="300")
+
+    canvas5.image = img5
+    ############################################################################################################################################
+
+    def on_image_click5(event):
+        img_description3 = tk.Toplevel(t) 
+        img_description3.geometry("1000x800")
+        img_description3.title("Recipe Details")
+        img_description3.resizable(False,False)
+        outer_frame = tk.Frame(img_description3, bg="lightgreen")
+        outer_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+        inner_frame = tk.Frame(outer_frame, bg="white")
+        inner_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        frame_ingredients = tk.Frame(inner_frame, bg="lightgreen")
+        frame_ingredients.place(x=350, y=20, width=250, height=500)
+        frame_ingredients = tk.Frame(inner_frame, bg="lightgreen")
+        frame_ingredients.place(x=350, y=20, width=250, height=500)
+        Ingredients2=tk.Label(frame_ingredients, text="Ingredients", font=("Arial", 16, "bold"), bg="lightgreen")
+        Ingredients2.pack(pady=10)
+        canvas3 = tk.Canvas(inner_frame, width=200, height=250)
+        canvas3.place(x='20',y='60')
+        img3 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (7).png")
+        image_id3 = canvas3.create_image(100, 150, image=img3, anchor="center")
+        canvas3.tag_bind(image_id3, "<Button-1>", on_image_click3)
+        canvas3.image = img3
+
+        canvas_desgine = tk.Canvas(inner_frame, width=300, height=300)
+        canvas_desgine.place(x='1100',y='370')
+        img_desgine = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (9).png")
+        image_id_desgine = canvas_desgine.create_image(150   , 150, image=img_desgine, anchor="center")
+        canvas_desgine.image = img_desgine
+
+        name_meal=tk.Label(inner_frame, text="Herb-Crusted Salmon with\n Lemon and Olive Gremolata",font=("Goudy Old Style", 14), fg="darkgreen")
+        name_meal.place(x='10',y='340')
+        cost_meal=tk.Label(inner_frame, text="HCSWLAOG=350EG",font=("Goudy Old Style", 14), fg="darkgreen")
+        cost_meal.place(x='10',y='400')
+        
+        
+        
+        ingredients = [
+            '2 lemons, sliced ¼-inch thick',
+            '1 (2½-pound) skin-on salmon fillet',
+            '3 cloves garlic, minced',
+            '5 tablespoons extra-virgin olive oil, divided',
+            '1 teaspoon salt, divided',
+            '½ teaspoon ground pepper',
+            '¾ cup loosely packed fresh flat-leaf parsley',
+            '¼ cup loosely packed fresh dill',
+            '2 tablespoons chopped shallots',
+            '1 tablespoon lemon juice',
+            '3 pitted green olives',
+            '1 anchovy fillet, finely chopped (about ½ teaspoon)'
+        ]
+        for ing in ingredients:
+            tk.Label(frame_ingredients, text=ing, bg="lightgreen", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+            frame_cal = tk.Frame(inner_frame, bg="white", bd=2, relief="ridge")
+        frame_cal.place(x=650, y=20, width=250, height=500)
+        tk.Label(frame_cal , text="Calories", font=("Arial", 16, "bold"), bg="white").pack(pady=10)
+        cal = [
+            'Lemons (2 medium): ~40 calories',
+            'Salmon fillet (2½ pounds): ~1,270 calories',
+            'Garlic (3 cloves): ~13 calories',
+            'Extra-virgin olive oil (5 tablespoons): ~600 calories',
+            'Salt (1 teaspoon): 0 calories',
+            'Ground pepper (½ teaspoon): 0 calories',
+            'Fresh flat-leaf parsley (¾ cup): ~5 calories',
+            'Fresh dill (¼ cup): ~4 calories',
+            'Shallots (2 tablespoons): ~8 calories',
+            'Lemon juice (1 tablespoon): ~4 calories',
+            'Green olives (3 pieces): ~15 calories',
+            'Anchovy fillet (½ teaspoon): ~4 calories',
+            'Total Calories: ~1,963 calories'
+            ]
+        for cals in cal:
+            tk.Label(frame_cal, text=cals, bg="lightgray", anchor="w", justify="left", wraplength=240).pack(anchor="w", padx=10, pady=2)
+        order = tk.Button(inner_frame, text='Add to Basket', bg="white", width=20, fg='green', command=lambda:add_to_basket("Herb-Crusted Salmon with Lemon and Olive Gremolata"))
+        order.place(x=800, y=600)
+
+    canvas5.tag_bind(image_id5, "<Button-1>", on_image_click5)
+
+# First page (home_page)
+def open_thred_page(event):
+    resturant_page = tk.Toplevel(home_page)
+    
+#page details
+    resturant_page.geometry('960x540+480+270')
+    resturant_page.config(background='#420c09')
+    resturant_page.minsize(960,540)
+    resturant_page.title('Los pollos hermanos x Pizza hut')
+    resturant_page.iconbitmap(r'c:\Users\ramad\Downloads\img\lph x phsanta.ico')
+
+    #page logo
+    page_logo_path=r'c:\Users\ramad\Downloads\img\lph x phsanta.ico'
+    page_logo_img=Image.open(page_logo_path)
+    page_resized=page_logo_img.resize((400, 210))
+    page_logo=ImageTk.PhotoImage(page_resized)
+    pl=tk.Canvas(resturant_page, width=960, height=540, bg="#420c09", highlightthickness=0)
+    pl.pack(fill="both", expand=True)
+    pl.create_image(100, -50, image=page_logo, anchor="nw")
+
+    #back button
+    back_button=tk.Button(resturant_page, text="⇐", font=("Arial", 15), width=3, height=3, bg="#420c09", fg="white", command=resturant_page.destroy)
+    back_button.place(x=0, y=0)
+
+
+
+
+    #hawaiian pizza
+    #frame photo
+    hawaiian_path=r'c:\Users\ramad\Downloads\img\Hawaiian pizzasanta..png'
+    hawaiian_img=Image.open(hawaiian_path)
+    hawaiian_resized=hawaiian_img.resize((200,300))
+    hawaiian_photo=ImageTk.PhotoImage(hawaiian_resized)
+    pl.create_image(550, 300, image=hawaiian_photo, anchor="nw")
+
+    #backend ha1
+    counter2=0
+    def update_labelha(event):
+        label4.config(text=str(counter2))
+    def incrementha(event):
+        global counter2
+        counter2 += 1
+        update_labelha()
+    def decrementha(event):
+        global counter2
+        if counter2 > 0:  
+            counter2 -= 1
+        update_labelha()
+
+    #backend ha2
+    def save_to_excel2(quantity, product_name, price,event):
+        try:
+            workbook = load_workbook(r"c:\Users\ramad\Downloads\img\lph x phsanta..png")
+            sheet = workbook.active
+        except FileNotFoundError:
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet["A1"] = "Quantity"
+            sheet["B1"] = "Product Name"
+            sheet["C1"] = "Price"
+
+        row = sheet.max_row + 1
+        sheet[f"A{row}"] = quantity
+        sheet[f"B{row}"] = product_name
+        sheet[f"C{row}"] = price
+        workbook.save(r"c:\Users\ramad\Downloads\img\lph x phsanta..png")
+
+    #counter
+    label4=tk.Label(resturant_page, text=str(counter2), font=("Arial", 8),width=1, height=1)
+    label4.place(x=700,y=518)
+
+    #up button
+    button_up3=tk.Button(resturant_page, text="▲", command=incrementha, font=("Arial", 4),width=1, height=1)
+    button_up3.place(x=715,y=518)
+
+    #down button
+    button_down3=tk.Button(resturant_page, text="▼", command=decrementha, font=("Arial", 4),width=1, height=1)
+    button_down3.place(x=715,y=529)
+
+    #price
+    label5=tk.Label(resturant_page, text="140EGP", font=("Arial", 10),width=7, height=2, bg="#420c09", fg="white")
+    label5.place(x=590,y=511)
+
+    #product name
+    hawaiian=tk.Label(resturant_page, text="Hawaiian", font=("Arial", 12),width=20, height=2, bg="#420c09", fg="white")
+    hawaiian.place(x=560,y=470)
+
+    #buy button
+    button3 = tk.Button(resturant_page, text="buy", command=lambda: save_to_excel2(counter, "Hawaiian", 140), font=("Arial", 10), width=10, height=1, bg="green", fg="white")
+    button3.place(x=575, y=550)
+
+    #vegetarian supreme pizza
+    #frame photo
+    vegetarian_path=r'c:\Users\ramad\Downloads\img\Vegetarian supreme pizzasanta..png'
+    vegetarian_img=Image.open(vegetarian_path)
+    vegetarian_resized=vegetarian_img.resize((200,300))
+    vegetarian_photo=ImageTk.PhotoImage(vegetarian_resized)
+    pl.create_image(800, 300, image=vegetarian_photo, anchor="nw")
+
+    #backend ve1
+    counter3=0
+    def update_labelve(event):
+        label6.config(text=str(counter3))
+    def incrementve():
+        global counter3
+        counter3 += 1
+        update_labelve()
+    def decrementve(event):
+        global counter3
+        if counter3 > 0:  
+            counter3 -= 1
+        update_labelve()
+        
+    #backend ve2
+    def save_to_excel3(event,quantity, product_name, price):
+        try:
+            workbook = load_workbook("lph x phsh.xlsx")
+            sheet = workbook.active
+        except FileNotFoundError:
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet["A1"] = "Quantity"
+            sheet["B1"] = "Product Name"
+            sheet["C1"] = "Price"
+
+        row = sheet.max_row + 1
+        sheet[f"A{row}"] = quantity
+        sheet[f"B{row}"] = product_name
+        sheet[f"C{row}"] = price
+        workbook.save("lph x phsh.xlsx")
+
+    #counter
+    label6=tk.Label(resturant_page, text=str(counter3), font=("Arial", 8),width=1, height=1)
+    label6.place(x=950,y=518)
+
+    #up button
+    button_up4=tk.Button(resturant_page, text="▲", command=incrementve, font=("Arial", 4),width=1, height=1)
+    button_up4.place(x=965,y=518)
+
+    #down button
+    button_down4=tk.Button(resturant_page, text="▼", command=decrementve, font=("Arial", 4),width=1, height=1)
+    button_down4.place(x=965,y=529)
+
+    #price
+    label7=tk.Label(resturant_page, text="160EGP", font=("Arial", 10),width=7, height=2, bg="#420c09", fg="white")
+    label7.place(x=840,y=511)
+
+    #product name
+    vegetarian=tk.Label(resturant_page, text="Vegetarian", font=("Arial", 12),width=20, height=2, bg="#420c09", fg="white")
+    vegetarian.place(x=810,y=470)
+
+    #buy button
+    button4 = tk.Button(resturant_page, text="buy", command=lambda: save_to_excel3(counter, "Vegetarian", 160), font=("Arial", 10), width=10, height=1, bg="green", fg="white")
+    button4.place(x=825, y=550)
+
+    #chicken supreme pizza
+    #frame photo
+    chicken_path=r'c:\Users\ramad\Downloads\img\Chicken supreme pizzasanta..png'
+    chicken_img=Image.open(chicken_path)
+    chicken_resized=chicken_img.resize((200,300))
+    chicken_photo=ImageTk.PhotoImage(chicken_resized)
+    pl.create_image(1050, 300, image=chicken_photo, anchor="nw")
+
+    #backend ch1
+    counter4=0
+    def update_labelch(event):
+        label8.config(text=str(counter4))
+    def incrementch(event):
+        global counter4
+        counter4 += 1
+        update_labelch()
+    def decrementch(event):
+        global counter4
+        if counter4 > 0:  
+            counter4 -= 1
+        update_labelch()
+
+    #backend ch2
+    def save_to_excel4(event,quantity, product_name, price):
+        try:
+            workbook = load_workbook("lph x phsh.xlsx")
+            sheet = workbook.active
+        except FileNotFoundError:
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet["A1"] = "Quantity"
+            sheet["B1"] = "Product Name"
+            sheet["C1"] = "Price"
+
+        row = sheet.max_row + 1
+        sheet[f"A{row}"] = quantity
+        sheet[f"B{row}"] = product_name
+        sheet[f"C{row}"] = price
+        workbook.save("lph x phsh.xlsx")
+
+    #counter
+    label8=tk.Label(resturant_page, text=str(counter4), font=("Arial", 8),width=1, height=1)
+    label8.place(x=1200,y=518)
+
+    #up button
+    button_up5=tk.Button(resturant_page, text="▲", command=incrementch, font=("Arial", 4),width=1, height=1)
+    button_up5.place(x=1215,y=517)
+
+    #down button
+    button_down5=tk.Button(resturant_page, text="▼", command=decrementch, font=("Arial", 4),width=1, height=1)
+    button_down5.place(x=1215,y=528)
+
+    #price
+    label9=tk.Label(resturant_page, text="180EGP", font=("Arial", 10),width=7, height=2, bg="#420c09", fg="white")
+    label9.place(x=1100,y=518)
+
+    #product name
+    chicken=tk.Label(resturant_page, text="Chicken", font=("Arial", 12),width=20, height=2, bg="#420c09", fg="white")
+    chicken.place(x=1060,y=470)
+
+    #buy button
+    button5 = tk.Button(resturant_page, text="buy", command=lambda: save_to_excel4(counter, "Chicken", 180), font=("Arial", 10), width=10, height=1, bg="green", fg="white")
+    button5.place(x=1075, y=550)
+
+    #beef supreme pizza
+    #frame photo
+    beef_path=r'c:\Users\ramad\Downloads\img\Beef supreme pizzasanta..png'
+    beef_img=Image.open(beef_path)
+    beef_resized=beef_img.resize((200,300))
+    beef_photo=ImageTk.PhotoImage(beef_resized)
+    pl.create_image(1300, 300, image=beef_photo, anchor="nw")
+
+    #backend be1
+    counter5=0
+    def update_labelbe(event):
+        label10.config(text=str(counter5))
+    def incrementbe(event):
+        global counter5
+        counter5 += 1
+        update_labelbe()
+    def decrementbe(event):
+        global counter5
+        if counter5 > 0:  
+            counter5 -= 1
+        update_labelbe()
+
+    #backend be2
+    def save_to_excel5(event,quantity, product_name, price):
+        try:
+            workbook = load_workbook("lph x phsh.xlsx")
+            sheet = workbook.active
+        except FileNotFoundError:
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet["A1"] = "Quantity"
+            sheet["B1"] = "Product Name"
+            sheet["C1"] = "Price"
+
+        row = sheet.max_row + 1
+        sheet[f"A{row}"] = quantity
+        sheet[f"B{row}"] = product_name
+        sheet[f"C{row}"] = price
+        workbook.save("lph x phsh.xlsx")
+
+    #counter
+    label10=tk.Label(resturant_page, text=str(counter5), font=("Arial", 8),width=1, height=1)
+    label10.place(x=1445,y=518)
+
+    #up button
+    button_up6=tk.Button(resturant_page, text="▲", command=incrementbe, font=("Arial", 4),width=1, height=1)
+    button_up6.place(x=1460,y=518)
+
+    #down button
+    button_down6=tk.Button(resturant_page, text="▼", command=decrementbe, font=("Arial", 4),width=1, height=1)
+    button_down6.place(x=1460,y=529)
+
+    #price
+    label11=tk.Label(resturant_page, text="200EGP", font=("Arial", 10),width=7, height=2, bg="#420c09", fg="white")
+    label11.place(x=1340,y=511)
+
+    #product name
+    beef=tk.Label(resturant_page, text="Beef", font=("Arial", 12),width=20, height=2, bg="#420c09", fg="white")
+    beef.place(x=1310,y=470)
+
+    #buy button
+    button6 = tk.Button(resturant_page, text="buy", command=lambda: save_to_excel5(counter, "Beef", 200), font=("Arial", 10), width=10, height=1, bg="green", fg="white")
+    button6.place(x=1330, y=550)
+
+    #margherita pizza
+    #frame photo
+    margherita_path=r'c:\Users\ramad\Downloads\img\santa.Margherita pizza.png'
+    margherita_img=Image.open(margherita_path)
+    margherita_resized=margherita_img.resize((200,300))
+    margherita_photo=ImageTk.PhotoImage(margherita_resized)
+    pl.create_image(55, 300, image=margherita_photo, anchor="nw")
+
+    #backend ma1
+    counter6=0
+    def update_labelma(event):
+        label.config(text=str(counter6))
+    def incrementma(event):
+        global counter6
+        counter6 += 1
+        update_labelma()
+    def decrementma(event):
+        global counter6
+        if counter6 > 0:  
+            counter6 -= 1
+        update_labelma()
+        
+    #backend ma2
+    def save_to_excel6(event,quantity, product_name, price):
+        try:
+            workbook = load_workbook("lph x phsh.xlsx")
+            sheet = workbook.active
+        except FileNotFoundError:
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet["A1"] = "Quantity"
+            sheet["B1"] = "Product Name"
+            sheet["C1"] = "Price"
+
+        row = sheet.max_row + 1
+        sheet[f"A{row}"] = quantity
+        sheet[f"B{row}"] = product_name
+        sheet[f"C{row}"] = price
+        workbook.save("lph x phsh.xlsx")
+
+    #counter
+    label=tk.Label(resturant_page, text=str(counter6), font=("Arial", 8),width=1, height=1)
+    label.place(x=200,y=518)
+    #up button
+    button_up=tk.Button(resturant_page, text="▲", command=incrementma, font=("Arial", 4),width=1, height=1)
+    button_up.place(x=215,y=518)
+    #down button
+    button_down=tk.Button(resturant_page, text="▼", command=decrementma, font=("Arial", 4),width=1, height=1)
+    button_down.place(x=215,y=529)
+    #price
+    label1=tk.Label(resturant_page, text="99EGP", font=("Arial", 10),width=7, height=2, bg="#420c09", fg="white")
+    label1.place(x=90,y=511)
+    #product name
+    margherita=tk.Label(resturant_page, text="Margherita", font=("Arial", 12),width=20, height=2, bg="#420c09", fg="white")
+    margherita.place(x=60,y=470)
+
+    #buy button
+    button = tk.Button(resturant_page, text="buy", command=lambda: save_to_excel6(counter6, "Margherita", 99), font=("Arial", 10), width=10, height=1, bg="green", fg="white")
+    button.place(x=69, y=550)
+
+    #pepperoni pizza
+    #frame photo
+    pepperoni_path=r'c:\Users\ramad\Downloads\img\santa.Pepperoni pizza.png'
+    pepperoni_img=Image.open(pepperoni_path)
+    pepperoni_resized=pepperoni_img.resize((200,300))
+    pepperoni_photo=ImageTk.PhotoImage(pepperoni_resized)
+    pl.create_image(300, 300, image=pepperoni_photo, anchor="nw")
+
+    #backend pe1
+    counter=0
+    def update_labelpe(event):
+        label2.config(text=str(counter))
+    def incrementpe(event):
+        global counter
+        counter += 1
+        update_labelpe()
+    def decrementpe(event):
+        global counter
+        if counter > 0:  
+            counter -= 1
+        update_labelpe()
+
+    #backend pe2
+    def save_to_excel1(event,quantity, product_name, price):
+        try:
+            workbook = load_workbook("lph x phsh.xlsx")
+            sheet = workbook.active
+        except FileNotFoundError:
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet["A1"] = "Quantity"
+            sheet["B1"] = "Product Name"
+            sheet["C1"] = "Price"
+
+        row = sheet.max_row + 1
+        sheet[f"A{row}"] = quantity
+        sheet[f"B{row}"] = product_name
+        sheet[f"C{row}"] = price
+        workbook.save("lph x phsh.xlsx")
+
+    #counter
+    label2=tk.Label(resturant_page, text=str(counter), font=("Arial", 8),width=1, height=1)
+    label2.place(x=450,y=518)
+
+    #up button
+    button_up2=tk.Button(resturant_page, text="▲", command=incrementpe, font=("Arial", 4),width=1, height=1)
+    button_up2.place(x=465,y=518)
+
+    #down button
+    button_down2=tk.Button(resturant_page, text="▼", command=decrementpe, font=("Arial", 4),width=1, height=1)
+    button_down2.place(x=465,y=529)
+
+    #price
+    label3=tk.Label(resturant_page, text="120EGP", font=("Arial", 10),width=7, height=2, bg="#420c09", fg="white")
+    label3.place(x=340,y=511)
+
+    #product name
+    pepperoni=tk.Label(resturant_page, text="Pepperoni", font=("Arial", 12),width=20, height=2, bg="#420c09", fg="white")
+    pepperoni.place(x=310,y=470)
+
+    #buy button
+    button2 = tk.Button(resturant_page, text="buy", command=lambda: save_to_excel1(counter, "Pepperoni", 120), font=("Arial", 10), width=10, height=1, bg="green", fg="white")
+    button2.place(x=325, y=550)
+    resturant_page.mainloop()
+
+def open_fourth_page(event):
+    import tkinter as tk
+   
+    from PIL import Image, ImageTk
+
+    # تعريف قائمة الطعام (menu)
+    menu = {
+        'Pulled Pork and Slaw Burgers': 50,
+        'Chicken Cutlets with Sun-Dried Tomato Cream Sauce': 300,
+        'Baked Eggs in Tomato Sauce with Kale': 500,
+        'Extra Ketchup': 10,
+        'Extra Mayonnaise': 10,
+        'Extra Egg': 15,
+        'Special Extra': 100,
+        'Baked Eggs in Tomato Sauce with Kale': 350
+    }
+
+    # قائمة إضافية للأطعمة
+    menu_items = [
+        {"name": "Margherita Pizza", "price": 100.0},
+        {"name": "Pepperoni Pizza", "price": 150.0},
+        {"name": "Veggie Pizza", "price": 80.0},
+        {"name": "BBQ Chicken Pizza", "price": 90.0},
+        {"name": "Extra Cheese Pizza", "price": 95.0},
+        {"name": "Meat Lovers Pizza", "price": 110.0},
+        {"name": "Tuna Pizza", "price": 85.0},
+        {"name": "Sausage Pizza", "price": 95.0},
+        {"name": "Four Cheese Pizza", "price": 100.0},
+    ]
+
+    # دمج قائمة menu_items مع قائمة menu الأصلية
+    for item in menu_items:
+        menu[item['name']] = item['price']
+
+    # قائمة السلة التي تحتوي على جميع الطلبات
+    basket_all_orders = []
+
+    # دالة لإضافة عنصر إلى السلة
+    def add_to_basket(item, price):
+        for i in range(len(basket_all_orders)):
+            if basket_all_orders[i][0] == item:
+                basket_all_orders[i] = (item, price, basket_all_orders[i][2] + 1)
+                return
+        basket_all_orders.append((item, price, 1))
+
+    # دالة لإزالة عنصر من السلة
+    def remove_from_basket(item):
+        for i in range(len(basket_all_orders)):
+            if basket_all_orders[i][0] == item:
+                if basket_all_orders[i][2] > 1:
+                    basket_all_orders[i] = (item, basket_all_orders[i][1], basket_all_orders[i][2] - 1)
+                else:
+                    basket_all_orders.pop(i)
+                return
+
+    # دالة لحساب الفاتورة
+    def calculate_bill():
+        total = sum(price * quantity for _, price, quantity in basket_all_orders)
+        tax = total * 0.1
+        total_with_tax = total + tax
+
+        bill_window = tk.Toplevel(root)
+        bill_window.geometry("400x300")
+        bill_window.title("FOOD BILL")
+        bill_window.resizable(False, False)
+
+        tk.Label(bill_window, text="--------- FOOD BILL ---------\n", font=("Arial", 16)).pack(pady=10)
+        for item, price, quantity in basket_all_orders:
+            tk.Label(bill_window, text=f"{item} (x{quantity}): {price * quantity} EG", font=("Arial", 12)).pack(anchor="w", padx=10)
+
+        tk.Label(bill_window, text=f"\nALL PRICE: {total} EG", font=("Arial", 14, "bold")).pack(pady=10)
+        tk.Label(bill_window, text=f"TAX (10%): {tax} EG", font=("Arial", 12)).pack(pady=5)
+        tk.Label(bill_window, text=f'Total with tax: {total_with_tax} EG', font=("Arial", 14, "bold")).pack(pady=10)
+
+    # دالة لتحديث الإجمالي في واجهة المستخدم
+    def update_total():
+        total_price = sum(price * quantity for _, price, quantity in basket_all_orders)
+        label_total.config(text=f"Total: {total_price:.2f} EGP")
+
+    # دالة لإضافة عنصر من قائمة menu_items
+    def add_item(index):
+        item = menu_items[index]["name"]
+        price = menu_items[index]["price"]
+        add_to_basket(item, price)
+        update_total()
+
+    # دالة لطرح عنصر من قائمة menu_items
+    def subtract_item(index):
+        item = menu_items[index]["name"]
+        remove_from_basket(item)
+        update_total()
+
+    # واجهة المستخدم الرئيسية
+    root = tk.Tk()
+    root.title("Menu Application")
+    root.geometry("800x600")
+    root.resizable(False, False)
+
+    # رسم الخلفية
+    canvas = tk.Canvas(root, width=800, height=600)
+    canvas.pack(fill="both", expand=True)
+    canvas.create_rectangle(0, 0, 400, 600, fill="green", outline="green")
+    canvas.create_rectangle(400, 0, 800, 600, fill="red", outline="red")
+    canvas.create_line(400, 0, 400, 600, fill="white", width=5)
+
+    # عرض العناصر في واجهة المستخدم
+    for i, item in enumerate(menu_items):
+        bg_color = "green" if i % 2 == 0 else "red"
+        frame = tk.Frame(root, bg=bg_color, relief="ridge", borderwidth=2)
+        frame.place(x=20 + (i % 2) * 400, y=20 + (i // 2) * 120, width=360, height=100)
+
+        tk.Label(frame, text=item["name"], font=("Arial", 14, "bold"), bg=bg_color, fg="white").grid(row=0, column=0, sticky="w", padx=5)
+        tk.Label(frame, text=f"Price: {item['price']} EGP", font=("Arial", 12), bg=bg_color, fg="white").grid(row=1, column=0, sticky="w", padx=5)
+        tk.Button(frame, text="+", font=("Arial", 12, "bold"), command=lambda i=i: add_item(i), bg="white", fg=bg_color, width=2).grid(row=1, column=1, sticky="e", padx=5)
+        tk.Button(frame, text="-", font=("Arial", 12, "bold"), command=lambda i=i: subtract_item(i), bg="white", fg=bg_color, width=2).grid(row=1, column=2, sticky="e", padx=5)
+
+    # عرض المجموع الإجمالي
+    label_total = tk.Label(root, text="Total: 0.00 EGP", font=("Arial", 16, "bold"), bg="black", fg="white")
+    label_total.place(x=600, y=520)
+
+    # زر لحساب الفاتورة
+    tk.Button(root, text="CALCULATE BILL", font=("Arial", 12, "bold"), bg="green", fg="white", width=15, command=calculate_bill).place(x=600, y=560)
+
+    # بدء التطبيق
+    root.mainloop()
+
+
+
+from tkinter import *
+import tkinter as tk
+from PIL import Image, ImageTk
+
+
+def open_five_page(event):
+    
+  
+
+
+    root = tk.Toplevel(home_page)
+
+    # Initialize the main window
+    root.title("Los Pollos Hermanos")
+    root.geometry("1200x900")
+    root.configure(bg="#222831")
+
+    # Menu items with prices
+    menu = {
+        'Burger': 50,
+        'Fries': 30,
+        'Coca-Cola': 20,
+        'Two beef patties': 100,
+        'Cheese': 20,
+        'Lettuce': 10,
+        'Pickles': 10,
+        'Onion': 10,
+        'Special sauce': 15,
+        'Middle bun': 15,
+        'Share Box': 120,
+        'Big Mac': 150,
+    }
+
+    # Initialize basket (use a dictionary to track quantities)
+    basket = {}
+
+    # Total Price Label
+    total_label = Label(root, text="Total: 0 EG", font=("Arial", 16, "bold"), fg="#FFD369", bg="#222831")
+    total_label.place(x=700, y=650)
+
+    # Basket Display
+    basket_display = Text(root, width=40, height=10, bg="#393E46", fg="white", font=("Arial", 12), wrap=WORD)
+    basket_display.place(x=660, y=200)
+
+    # Function to refresh basket display
+    def refresh_basket_display():
+        basket_display.delete("1.0", END)
+        if basket:
+            for item, quantity in basket.items():
+                basket_display.insert(END, f"{item}: {quantity} x {menu[item]} = {menu[item] * quantity} EG\n")
+        else:
+            basket_display.insert(END, "Basket is empty.\n")
+
+    # Function to calculate the total price and show the bill
+    def calculate_bill():
+        total = 0
+        for item, quantity in basket.items():
+            total += menu[item] * quantity
+
+        tax = total * 0.1
+        total_with_tax = total + tax
+
+        # Create a new window for the bill
+        bill_window = tk.Toplevel(root)
+        bill_window.geometry("400x300")
+        bill_window.title("FOOD BILL")
+        bill_window.resizable(False, False)
+
+        bill_text = tk.Label(bill_window, text="--------- FOOD BILL ---------\n", font=("Arial", 16))
+        bill_text.pack(pady=10)
+
+        for item, quantity in basket.items():
+            bill_text = tk.Label(bill_window, text=f"{item}: {menu[item]} x {quantity} = {menu[item] * quantity} EG", font=("Arial", 12))
+            bill_text.pack(anchor="w", padx=10)
+
+        bill_text = tk.Label(bill_window, text=f"\nALL PRICE: {total} EG", font=("Arial", 14, "bold"))
+        bill_text.pack(pady=10)
+        bill_text = tk.Label(bill_window, text=f"TAX:(10%): {tax} EG", font=("Arial", 12))
+        bill_text.pack(pady=5)
+        bill_text = tk.Label(bill_window, text=f'Total with tax: {total_with_tax} EG', font=("Arial", 14, "bold"))
+        bill_text.pack(pady=10)
+
+    # Function to add item to the basket
+    def add_to_basket(item, quantity):
+        if item in menu:
+            if item in basket:
+                basket[item] += quantity
+            else:
+                basket[item] = quantity
+            refresh_basket_display()
+
+    # Function to update quantity
+    def update_quantity(var, delta):
+        try:
+            current_value = int(var.get())
+            new_value = max(1, current_value + delta)
+            var.set(str(new_value))
+        except ValueError:
+            var.set("1")
+
+    # Function to create ingredient sections with quantity buttons
+    def create_ingredients_section(frame_x, frame_y, label_text, ingredients, price):
+        ingredients_frame = Frame(root, bg="#222831")
+        ingredients_frame.place(x=frame_x, y=frame_y)
+        ingredients_label = Label(ingredients_frame, text=label_text, font=("Arial", 12, "bold"), fg="#FFD369", bg="#222831")
+        ingredients_label.pack(anchor="w")
+        listbox = Listbox(ingredients_frame, height=8, width=30, bg="#393E46", fg="white", selectbackground="#FFD369")
+        listbox.pack(pady=10)
+        for item in ingredients:
+            listbox.insert(END, item)
+
+        # Quantity Controls
+        quantity_var = StringVar(value="1")
+        quantity_frame = Frame(root, bg="#222831")
+        quantity_frame.place(x=frame_x, y=frame_y + 200)
+        minus_button = Button(quantity_frame, text="-", bg="#00ADB5", fg="white", command=lambda: update_quantity(quantity_var, -1))
+        minus_button.grid(row=0, column=0, padx=5)
+        quantity_entry = Entry(quantity_frame, textvariable=quantity_var, width=5, justify="center", bg="#393E46", fg="white")
+        quantity_entry.grid(row=0, column=1, padx=5)
+        plus_button = Button(quantity_frame, text="+", bg="#00ADB5", fg="white", command=lambda: update_quantity(quantity_var, 1))
+        plus_button.grid(row=0, column=2, padx=5)
+
+        # Add to Basket Button
+        add_button = Button(root, text="Add to Basket", bg="#00ADB5", fg="white", font=("Arial", 12, "bold"), 
+                            command=lambda: add_to_basket(label_text.split(":")[1].strip(), int(quantity_var.get())))
+        add_button.place(x=frame_x, y=frame_y + 250)
+        return listbox
+
+    # Function to create image sections
+    def create_image_section(frame_x, frame_y, image_path):
+        try:
+            original_image = Image.open(image_path)
+            resized_image = original_image.resize((300, 300))
+            photo = ImageTk.PhotoImage(resized_image)
+            image_label = Label(root, image=photo, bg="#222831")
+            image_label.image = photo
+            image_label.place(x=frame_x, y=frame_y)
+        except FileNotFoundError:
+            error_label = Label(root, text="Image not found", font=("Arial", 12), fg="red", bg="#222831")
+            error_label.place(x=frame_x, y=frame_y + 150)
+
+    # Creating product sections with images and ingredients
+    create_image_section(20, 80, "Share-Box.png")
+    ingredients_listbox1 = create_ingredients_section(350, 80, "Ingredients: Share Box", ["Burger", "Fries", "Coca-Cola"], 120)
+
+    create_image_section(20, 430, "Big Mac.png")
+    ingredients_listbox2 = create_ingredients_section(350, 430, "Ingredients: Big Mac", ["Two beef patties", "Cheese", "Lettuce", "Pickles", "Onion", "Special sauce", "Middle bun"], 150)
+
+    # Bill Button
+    bill_button = Button(root, text="CALCULATE BILL", bg="lightgreen", width=20, fg="green", font=("Arial", 12, "bold"), command=calculate_bill)
+    bill_button.place(x=700, y=700)
+
+    # Start the main loop
+
+
+
+
+home_page = tk.Tk()
+home_page.geometry("1500x1500")
+
+
+home_page.title("Home Page")
+canvas = tk.Canvas(home_page, width=400, height=290)
+canvas.pack()
+#lean&grean
+img_for_home = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (10).png")
+image_id = canvas.create_image(210   , 158, image=img_for_home, anchor="center")
+# Button to open the second window (t)
+open_button = tk.Button(home_page,  command=open_second_window)
+canvas.tag_bind(image_id, "<Button-1>",open_second_window)
+canvas.image = img_for_home
+####################################################################################################################### 
+
+canvas2 = tk.Canvas(home_page, width=400, height=290)
+canvas2.place(x=10, y=10)
+
+img_for_home2 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (19).png")
+
+image_id2 = canvas2.create_image(200, 145, image=img_for_home2, anchor="center")  # Adjust position to center within canvas
+
+open_button = tk.Button(home_page,  command=lambda event: open_thred_page())
+
+canvas2.tag_bind(image_id2, "<Button-1>",   open_thred_page )
+
+canvas2.image = img_for_home2
+############################################################################################
+canvas3 = tk.Canvas(home_page, width=400, height=290)
+canvas3.place(x=10, y=410)
+
+img_for_home3 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (17).png")
+
+image_id3 = canvas3.create_image(200, 145, image=img_for_home3, anchor="center")  # Adjust position to center within canvas
+
+open_button4 = tk.Button(home_page,  command=lambda event: open_fourth_page())
+
+canvas3.tag_bind(image_id3, "<Button-1>",   open_fourth_page )
+
+canvas2.image = img_for_home2
+#open_button3 = tk.Button(home_page, text="Open Second Window", command=open_fourth_page)
+###############################################################################################
+canvas4 = tk.Canvas(home_page, width=400, height=290)
+canvas4.place(x=542, y=410)
+
+img_for_home4 = tk.PhotoImage(file=r"c:\Users\ramad\Downloads\Untitled Project (16).png")
+
+image_id4 = canvas4.create_image(200, 145, image=img_for_home4, anchor="center")  # Adjust position to center within canvas
+
+open_button5= tk.Button(home_page,  command=lambda event: open_five_page())
+
+canvas4.tag_bind(image_id4, "<Button-1>",   open_five_page )
+
+canvas4.image = img_for_home4
+
+
+        
+       
+
+        
+home_page.mainloop()
+#open_thred_page
